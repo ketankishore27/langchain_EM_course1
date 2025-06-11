@@ -10,7 +10,6 @@ import requests
 import os
 from dotenv import load_dotenv
 import time
-#os.environ["OPENAI_API_KEY"] = os.environ["OPENAI_API_KEY_PERSONAL"]
 
 @tool
 def scrape_website_table(url: str) -> int:
