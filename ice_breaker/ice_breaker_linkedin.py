@@ -12,7 +12,7 @@ from output_parser import summary_parser, Summary
 def ice_break_with(name: str) -> Tuple[Summary, str]:
 
     linkedin_url = lookup_agent(name)
-    linkedin_text = scrape_linkedin_profile(linkedIn_url = linkedin_url, mock=False)
+    linkedin_text = scrape_linkedin_profile(linkedIn_url=linkedin_url, mock=False)
 
     summary_template = """
     given the information {information} about a person from I want you to create:
@@ -23,21 +23,19 @@ def ice_break_with(name: str) -> Tuple[Summary, str]:
     """
 
     summary_prompt_template = PromptTemplate(
-        input_variables=["information"], 
+        input_variables=["information"],
         template=summary_template,
         partial_variables={
             "format_instruction": summary_parser.get_format_instructions()
-            }
-        )
-    
+        },
+    )
+
     llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
-    
 
     chain = summary_prompt_template | llm | summary_parser
-    res:Summary = chain.invoke(input={"information": linkedin_text})
+    res: Summary = chain.invoke(input={"information": linkedin_text})
 
     return res, linkedin_text.get("photoUrl")
-
 
 
 if __name__ == "__main__":
@@ -46,5 +44,3 @@ if __name__ == "__main__":
     print("Ice Breaker Enter")
     result_set, photo_url = ice_break_with("Noopur Srivastava Morgan Stanley LinkedIn")
     print(result_set, photo_url)
-    
-

@@ -6,9 +6,11 @@ load_dotenv()
 
 app = Flask(__name__)
 
+
 @app.route("/")
 def index():
     return render_template("index.html")
+
 
 @app.route("/process", methods=["POST"])
 def process():
@@ -19,10 +21,7 @@ def process():
         profile_pic_url = "https://media.licdn.com/dms/image/v2/D4D03AQEoOIm-fzLVdg/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1675868636282?e=1753920000&v=beta&t=M8-2c5a2SZj5AkfW27gX2fxNrkoAN1MbCjhK52XrjZM"
     print("Going to return the main Control")
     return jsonify(
-        {
-            "summary_and_facts": summary.to_dict(),
-            "photoUrl": profile_pic_url
-        }
+        {"summary_and_facts": summary.to_dict(), "photoUrl": profile_pic_url}
     )
 
 

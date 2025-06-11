@@ -24,8 +24,8 @@ if __name__ == "__main__":
 
     summary_prompt_template = PromptTemplate(
         input_variables=["information"], template=summary_template
-        )
-    
+    )
+
     llm = ChatOllama(model="llama3.2", temperature=0)
 
     chain = summary_prompt_template | llm | StrOutputParser()
@@ -33,5 +33,3 @@ if __name__ == "__main__":
     res = chain.invoke(input={"information": information})
 
     print(res)
-    
-

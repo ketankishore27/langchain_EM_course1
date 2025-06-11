@@ -13,13 +13,22 @@ if __name__ == "__main__":
     load_dotenv(".env")
     os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY_PERSONAL")
     text = TextLoader(file_path="rough_work/data/mediumArticle.txt").load()
-    text_splitter = CharacterTextSplitter(chunk_size = 1000, chunk_overlap = 30)
+    text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=30)
     documents = text_splitter.split_documents(text)
-    embedding = OpenAIEmbeddings(model = "text-embedding-3-small")
+    embedding = OpenAIEmbeddings(model="text-embedding-3-small")
     vector_store = FAISS.from_documents(documents, embedding)
-    llm = ChatOpenAI(model = "gpt-4o-mini", temperature = 0, streaming=True, callbacks=[StreamingStdOutCallbackHandler()])
+    llm = ChatOpenAI(
+        model="gpt-4o-mini",
+        temperature=0,
+        streaming=True,
+        callbacks=[StreamingStdOutCallbackHandler()],
+    )
     retrieval_prompt = hub.pull("langchain-ai/retrieval-qa-chat")
-    retrieval_stuff_chain = create_stuff_documents_chain(llm = llm, prompt = retrieval_prompt)
-    retrieval_chain = create_retrieval_chain(retriever=vector_store.as_retriever(), combine_docs_chain = retrieval_stuff_chain)
+    retrieval_stuff_chain = create_stuff_documents_chain(
+        llm=llm, prompt=retrieval_prompt
+    )
+    retrieval_chain = create_retrieval_chain(
+        retriever=vector_store.as_retriever(), combine_docs_chain=retrieval_stuff_chain
+    )
     sample_result = retrieval_chain.invoke({"input": "What is a vectordb"})
     print(sample_result)

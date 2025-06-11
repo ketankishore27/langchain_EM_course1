@@ -12,6 +12,7 @@ from langchain_core.agents import AgentAction, AgentFinish
 from langchain.agents.format_scratchpad.log import format_log_to_str
 from callbacks import AgentCallBackHandler
 
+
 @tool
 def get_text_length(text: str) -> int:
     """
@@ -62,7 +63,10 @@ if __name__ == "__main__":
     )
 
     llm = ChatOpenAI(
-        model="gpt-4o-mini", stop=["\nObservation", "Observation"], temperature=0, callbacks=[AgentCallBackHandler()]
+        model="gpt-4o-mini",
+        stop=["\nObservation", "Observation"],
+        temperature=0,
+        callbacks=[AgentCallBackHandler()],
     )
     agent = (
         {
@@ -77,9 +81,9 @@ if __name__ == "__main__":
     agent_step = ""
     while not isinstance(agent_step, AgentFinish):
         agent_step: Union[AgentAction, AgentFinish] = agent.invoke(
-            {   
-                "input": "What is the text length of 'DOG' in charaters?", 
-                "agent_scratchpad": intermediate_steps
+            {
+                "input": "What is the text length of 'DOG' in charaters?",
+                "agent_scratchpad": intermediate_steps,
             }
         )
         print(f"Agent Step: {agent_step}")
@@ -91,7 +95,5 @@ if __name__ == "__main__":
             result = tool.func(tool_input)
             intermediate_steps.append([agent_step, str(result)])
 
-    
     if isinstance(agent_step, AgentFinish):
         print(agent_step.return_values)
-
